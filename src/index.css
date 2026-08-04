@@ -1,0 +1,211 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Arad";
+  src: url("./assets/fonts/arad/AradFD-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Arad";
+  src: url("./assets/fonts/arad/AradFD-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Arad";
+  src: url("./assets/fonts/arad/AradFD-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Arad";
+  src: url("./assets/fonts/arad/AradFD-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --color-primary: #ea580c;
+  --color-primary-bright: #f97316;
+  --color-accent: #ea580c;
+  --color-text: #1c1917;
+  --color-text-muted: #78716c;
+  --color-surface: #fafaf8;
+  --color-elevated: #ffffff;
+  --color-muted: #f5f3ef;
+  --color-border: #e8e4dc;
+  --font-fa: "Arad", system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: transparent;
+  font-family: var(--font-fa);
+  color: var(--color-text);
+}
+
+::selection {
+  background: rgba(234, 88, 12, 0.22);
+  color: var(--color-text);
+}
+
+/* Opaque surface for the real settings/history BrowserWindow */
+html.panel-window,
+body.panel-window,
+.panel-window #root {
+  background: #fafaf8;
+}
+
+/* Explicit switch styles — beats global `button { background: none }` */
+.switch-track {
+  position: relative;
+  flex-shrink: 0;
+  width: 48px;
+  height: 28px;
+  padding: 0;
+  border-radius: 999px;
+  border-style: solid;
+  border-width: 1.5px;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.switch-track--on {
+  background-color: #ea580c !important;
+  border-color: #c2410c !important;
+}
+
+.switch-track--off {
+  background-color: #e7e5e4 !important;
+  border-color: #d6d3d1 !important;
+}
+
+.switch-thumb {
+  position: absolute;
+  top: 2px;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: left 0.2s ease;
+  pointer-events: none;
+}
+
+.switch-thumb--off {
+  left: 2px;
+}
+
+.switch-thumb--on {
+  left: 22px;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.selectable {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* No drop-shadow / halo — window bounds match opaque content. */
+.hud-pill {
+  border: 1px solid #e8e4dc;
+  background: #fafaf8;
+}
+
+.hud-pill--listening {
+  border-color: #fca5a5;
+  background: #fef2f2;
+}
+
+.hud-pill--busy {
+  border-color: #fdba74;
+  background: #fff7ed;
+}
+
+.hud-pill--feedback {
+  border-color: #fcd34d;
+  background: #fffbeb;
+}
+
+.hud-pill--feedback-success {
+  border-color: #6ee7b7;
+  background: #ecfdf5;
+}
+
+.listening-wave {
+  animation: wave-pulse 0.9s ease-in-out infinite;
+}
+
+@keyframes wave-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.75;
+    transform: scale(1.1);
+  }
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #d6d3d1 transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #d6d3d1;
+  border-radius: 999px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #a8a29e;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
