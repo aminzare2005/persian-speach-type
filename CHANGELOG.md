@@ -5,6 +5,17 @@ All notable changes to Persian Speach Type are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.0.2] - 2026-08-04
+
+### Changed
+
+- New app icon (black background + orange mic) for window, installer, and shortcuts
+- Visible system tray icon (no more blank tray square)
+
+### Fixed
+
+- Packaged Windows UI white screen (from 1.0.1) remains included in this release line
+
 ## [1.0.1] - 2026-08-04
 
 ### Fixed
@@ -23,5 +34,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Tray shell with home, settings, and history panels
 - Windows NSIS installer (`Persian Speach Type-Setup-1.0.0.exe`)
 
+[1.0.2]: https://github.com/aminzare2005/persian-speach-type/releases/tag/v1.0.2
 [1.0.1]: https://github.com/aminzare2005/persian-speach-type/releases/tag/v1.0.1
 [1.0.0]: https://github.com/aminzare2005/persian-speach-type/releases/tag/v1.0.0

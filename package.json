@@ -1,6 +1,6 @@
 {
   "name": "persian-speach-type",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Persian Speach Type — Persian voice-to-text for Windows. Speak anywhere, type everywhere.",
   "license": "MIT",
   "private": true,
@@ -102,6 +102,15 @@
       "dist-electron/**/*",
       "scripts/uia-caret-worker.ps1",
       "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "assets/",
+        "to": "assets",
+        "filter": [
+          "**/*"
+        ]
+      }
     ],
     "publish": [
       {

@@ -11,6 +11,7 @@ import {
   Tray,
 } from "electron";
 import { access, mkdir } from "node:fs/promises";
+import { existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { ShenavaService } from "./shenava/service";
@@ -44,6 +45,64 @@ import { isCorrectionProviderId } from "../src/lib/speech/correction";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const isDev = Boolean(process.env.ELECTRON_RENDERER_URL);
 const USER_DATA_DIR_NAME = "persian-speach-type";
+
+/** Packaged + dev path to files under /assets. */
+function assetPath(...segments: string[]) {
+  const candidates = app.isPackaged
+    ? [path.join(process.resourcesPath, "assets", ...segments)]
+    : [
+        path.join(__dirname, "..", "assets", ...segments),
+        path.join(process.cwd(), "assets", ...segments),
+        path.join(app.getAppPath(), "assets", ...segments),
+      ];
+  for (const candidate of candidates) {
+    if (existsSync(candidate)) return candidate;
+  }
+  return candidates[0];
+}
+
+function loadAppIcon() {
+  // Prefer PNG — Windows taskbar/titlebar renders it more reliably than some .ico builds.
+  const candidates = [assetPath("icon.png"), assetPath("icon-256.png"), assetPath("icon.ico")];
+  for (const file of candidates) {
+    try {
+      if (!existsSync(file)) continue;
+      const img = nativeImage.createFromPath(file);
+      if (!img.isEmpty()) {
+        console.log("[pst] app icon loaded", file, img.getSize());
+        return img;
+      }
+    } catch (error) {
+      console.error("[pst] app icon failed", file, error);
+    }
+  }
+  console.error("[pst] app icon missing — falling back to empty");
+  return nativeImage.createEmpty();
+}
+
+function loadTrayIcon() {
+  const candidates = [
+    assetPath("tray-icon.png"),
+    assetPath("tray-icon-16.png"),
+    assetPath("icon.png"),
+  ];
+  for (const file of candidates) {
+    try {
+      if (!existsSync(file)) continue;
+      const img = nativeImage.createFromPath(file);
+      if (!img.isEmpty()) {
+        console.log("[pst] tray icon loaded", file, img.getSize());
+        if (img.getSize().width > 32) {
+          return img.resize({ width: 32, height: 32, quality: "best" });
+        }
+        return img;
+      }
+    } catch {
+      // try next
+    }
+  }
+  return loadAppIcon().resize({ width: 32, height: 32, quality: "best" });
+}
 
 /** Pin userData to `%APPDATA%/persian-speach-type` (fresh profile after rebrand). */
 app.setPath("userData", path.join(app.getPath("appData"), USER_DATA_DIR_NAME));
@@ -188,6 +247,7 @@ function showPanel(view: PanelView, payload?: { text?: string }) {
   const win = ensurePanelWindow();
   panelView = view;
   lastPanelText = payload?.text ?? (view === "result" ? lastPanelText : "");
+  win.setIcon(loadAppIcon());
   if (win.webContents.isLoadingMainFrame()) {
     win.webContents.once("did-finish-load", () => sendPanelShow(win));
   } else {
@@ -276,6 +336,7 @@ function createPanelWindow() {
     autoHideMenuBar: true,
     show: false,
     title: "Persian Speach Type",
+    icon: loadAppIcon(),
     webPreferences: {
       preload: path.join(__dirname, "preload.cjs"),
       contextIsolation: true,
@@ -284,6 +345,9 @@ function createPanelWindow() {
       backgroundThrottling: false,
     },
   });
+
+  // Re-apply after create — Windows sometimes ignores constructor icon.
+  panelWindow.setIcon(loadAppIcon());
 
   loadRenderer(panelWindow, "panel");
 
@@ -308,12 +372,8 @@ function createPanelWindow() {
 }
 
 function createTray() {
-  tray = new Tray(
-    nativeImage.createFromDataURL(
-      "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAMElEQVQ4T2NkYGD4z0AEYBxVMFRgsIKRgUEwGAyjYTAaBqNhMBoGo2EwGgajYTBKwwAAX8UBAeR8nVUAAAAASUVORK5CYII="
-    )
-  );
-  tray.setToolTip("Persian Speach Type — تایپ با صدا (F8)");
+  tray = new Tray(loadTrayIcon());
+  tray.setToolTip("(F8) تایپ با صدا — Persian Speach Type");
   rebuildTrayMenu();
   tray.on("click", () => {
     if (panelWindow && panelWindow.isVisible() && panelView === "home") {
@@ -728,6 +788,16 @@ const gotLock = app.requestSingleInstanceLock();
 if (!gotLock) {
   app.quit();
 } else {
+  if (process.platform === "win32") {
+    // Dev uses a different id so Windows doesn't keep showing the installed
+    // shortcut's old cream icon on the taskbar.
+    app.setAppUserModelId(
+      isDev
+        ? "dev.persianspeachtype.desktop.dev"
+        : "dev.persianspeachtype.desktop"
+    );
+  }
+
   app.on("second-instance", () => {
     showPanel("home");
   });
