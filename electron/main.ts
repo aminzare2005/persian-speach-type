@@ -114,11 +114,16 @@ function loadRenderer(win: BrowserWindow, hash: string) {
   const url = rendererUrl(hash);
   if (url) {
     void win.loadURL(url);
-  } else {
-    void win.loadFile(path.join(__dirname, "../dist/index.html"), {
-      hash,
-    });
+    return;
   }
+
+  const indexHtml = path.join(__dirname, "../dist/index.html");
+  win.webContents.on("did-fail-load", (_e, code, desc, validatedURL) => {
+    console.error("[pst] renderer failed to load", { code, desc, validatedURL, indexHtml });
+  });
+  void win.loadFile(indexHtml, { hash }).catch((error) => {
+    console.error("[pst] loadFile error", indexHtml, error);
+  });
 }
 
 function sendToHud(channel: string, ...args: unknown[]) {

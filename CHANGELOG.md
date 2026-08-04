@@ -5,6 +5,12 @@ All notable changes to Persian Speach Type are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.0.1] - 2026-08-04
+
+### Fixed
+
+- White screen in the packaged Windows app — Vite asset URLs are now relative (`base: './'`) so `file://` loads work inside the installer build
+
 ## [1.0.0] - 2026-08-04
 
 ### Added
@@ -17,4 +23,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Tray shell with home, settings, and history panels
 - Windows NSIS installer (`Persian Speach Type-Setup-1.0.0.exe`)
 
+[1.0.1]: https://github.com/aminzare2005/persian-speach-type/releases/tag/v1.0.1
 [1.0.0]: https://github.com/aminzare2005/persian-speach-type/releases/tag/v1.0.0
