@@ -1,0 +1,12 @@
+dist
+dist-electron
+release
+node_modules
+*.log
+.DS_Store
+.env
+.env.*
+electron-err.log
+electron-out.log
+Thumbs.db
+design-system

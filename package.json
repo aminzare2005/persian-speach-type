@@ -1,0 +1,115 @@
+{
+  "name": "persian-speach-type",
+  "version": "1.0.0",
+  "description": "Persian Speach Type — Persian voice-to-text for Windows. Speak anywhere, type everywhere.",
+  "license": "MIT",
+  "private": true,
+  "engines": {
+    "node": ">=22.13.0",
+    "pnpm": ">=9"
+  },
+  "author": "Amin",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aminzare2005/persian-speach-type.git"
+  },
+  "bugs": {
+    "url": "https://github.com/aminzare2005/persian-speach-type/issues"
+  },
+  "homepage": "https://github.com/aminzare2005/persian-speach-type#readme",
+  "main": "dist-electron/main.js",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -k -n vite,esbuild,electron -c cyan,yellow,magenta \"vite\" \"node scripts/esbuild.mjs --watch\" \"wait-on tcp:127.0.0.1:5173 dist-electron/preload.cjs && node scripts/run-dev-electron.mjs\"",
+    "build:renderer": "vite build",
+    "build:electron": "node scripts/esbuild.mjs",
+    "build": "npm run build:renderer && npm run build:electron",
+    "start": "npm run build && node scripts/run-electron.mjs",
+    "dist": "npm run build && electron-builder --win nsis",
+    "dist:dir": "npm run build && electron-builder --win --dir",
+    "typecheck": "tsc --noEmit",
+    "version:patch": "npm version patch --no-git-tag-version",
+    "version:minor": "npm version minor --no-git-tag-version",
+    "version:major": "npm version major --no-git-tag-version"
+  },
+  "dependencies": {
+    "@openai/codex": "0.144.4",
+    "@phosphor-icons/react": "^2.1.10",
+    "clsx": "^2.1.1",
+    "koffi": "^2.11.0",
+    "motion": "^12.42.2",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "sherpa-onnx": "1.13.4",
+    "tailwind-merge": "^3.6.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4",
+    "@types/node": "^24.13.3",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^9.1.2",
+    "cross-env": "^7.0.3",
+    "electron": "^43.1.0",
+    "electron-builder": "^26.15.3",
+    "esbuild": "^0.24.2",
+    "tailwindcss": "^4",
+    "typescript": "^5",
+    "vite": "^6.0.7",
+    "wait-on": "^8.0.1"
+  },
+  "build": {
+    "appId": "dev.persianspeachtype.desktop",
+    "productName": "Persian Speach Type",
+    "copyright": "Copyright © Amin",
+    "asar": true,
+    "asarUnpack": [
+      "node_modules/sherpa-onnx/**/*",
+      "node_modules/koffi/**/*",
+      "node_modules/@openai/codex*/**/*",
+      "dist-electron/shenava-worker.cjs",
+      "scripts/uia-caret-worker.ps1"
+    ],
+    "directories": {
+      "output": "release",
+      "buildResources": "assets"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "assets/icon.ico",
+      "artifactName": "${productName}-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Persian Speach Type",
+      "installerIcon": "assets/icon.ico",
+      "uninstallerIcon": "assets/icon.ico",
+      "license": "LICENSE"
+    },
+    "files": [
+      "dist/**/*",
+      "dist-electron/**/*",
+      "scripts/uia-caret-worker.ps1",
+      "package.json"
+    ],
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "aminzare2005",
+        "repo": "persian-speach-type",
+        "releaseType": "release"
+      }
+    ]
+  }
+}

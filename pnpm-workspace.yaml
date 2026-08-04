@@ -1,0 +1,6 @@
+allowBuilds:
+  electron: true
+  esbuild: true
+  koffi: true
+  sherpa-onnx: true
+  electron-winstaller: true
