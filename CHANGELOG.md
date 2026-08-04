@@ -1,0 +1,20 @@
+# Changelog
+
+All notable changes to Persian Speach Type are documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/).
+
+## [1.0.0] - 2026-08-04
+
+### Added
+
+- Global hotkey dictation with local Shenava / sherpa-onnx speech-to-text
+- Paste into the focused text field when a real caret/editable control is active
+- Clipboard fallback with HUD feedback when no editable field is focused
+- Soft focus restore that does not yank apps out of fullscreen
+- Optional Codex / ChatGPT transcript correction
+- Tray shell with home, settings, and history panels
+- Windows NSIS installer (`Persian Speach Type-Setup-1.0.0.exe`)
+
+[1.0.0]: https://github.com/aminzare2005/persian-speach-type/releases/tag/v1.0.0
