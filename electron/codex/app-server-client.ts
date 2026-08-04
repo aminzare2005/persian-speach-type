@@ -4,7 +4,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import readline from "node:readline";
 import type { Readable, Writable } from "node:stream";
-import { resolveCodexExecutable } from "./runtime";
+import { ensureCodexRuntime } from "./runtime";
 
 type RpcId = number | string;
 
@@ -175,8 +175,9 @@ export class CodexAppServerClient {
   private readonly events = new EventEmitter();
   private readonly pending = new Map<RpcId, PendingRequest>();
   private readonly codexHome: string;
-  private readonly spawnProcess: () => CodexProcess;
+  private readonly spawnProcess: (executable: string) => CodexProcess;
   private readonly clientVersion: string;
+  private readonly fixedExecutablePath: string | null;
   private process: CodexProcess | null = null;
   private starting: Promise<void> | null = null;
   private nextRequestId = 1;
@@ -186,15 +187,15 @@ export class CodexAppServerClient {
     codexHome: string;
     executablePath?: string;
     clientVersion?: string;
-    spawnProcess?: () => CodexProcess;
+    spawnProcess?: (executable: string) => CodexProcess;
   }) {
     this.codexHome = options.codexHome;
     this.clientVersion = options.clientVersion ?? "0.1.0";
+    this.fixedExecutablePath = options.executablePath ?? null;
     this.spawnProcess =
       options.spawnProcess ??
-      (() => {
-        const executable = options.executablePath ?? resolveCodexExecutable();
-        return spawn(
+      ((executable: string) =>
+        spawn(
           executable,
           [
             "app-server",
@@ -209,8 +210,7 @@ export class CodexAppServerClient {
             stdio: ["pipe", "pipe", "pipe"],
             windowsHide: true,
           }
-        );
-      });
+        ));
   }
 
   onNotification(listener: (method: string, params: unknown) => void) {
@@ -246,9 +246,13 @@ export class CodexAppServerClient {
     mkdirSync(this.codexHome, { recursive: true, mode: 0o700 });
     writeManagedCodexConfig(this.codexHome);
 
+    const executable =
+      this.fixedExecutablePath ??
+      (await ensureCodexRuntime({ codexHome: this.codexHome }));
+
     let child: CodexProcess;
     try {
-      child = this.spawnProcess();
+      child = this.spawnProcess(executable);
     } catch (error) {
       throw error instanceof Error
         ? error

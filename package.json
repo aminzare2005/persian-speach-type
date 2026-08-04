@@ -1,6 +1,6 @@
 {
   "name": "persian-speach-type",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Persian Speach Type — Persian voice-to-text for Windows. Speak anywhere, type everywhere.",
   "license": "MIT",
   "private": true,
@@ -64,10 +64,13 @@
     "productName": "Persian Speach Type",
     "copyright": "Copyright © Amin",
     "asar": true,
+    "compression": "maximum",
+    "electronLanguages": [
+      "en-US"
+    ],
     "asarUnpack": [
       "node_modules/sherpa-onnx/**/*",
       "node_modules/koffi/**/*",
-      "node_modules/@openai/codex*/**/*",
       "dist-electron/shenava-worker.cjs",
       "scripts/uia-caret-worker.ps1"
     ],
@@ -101,14 +104,45 @@
       "dist/**/*",
       "dist-electron/**/*",
       "scripts/uia-caret-worker.ps1",
-      "package.json"
+      "package.json",
+      "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
+      "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}",
+      "!node_modules/@phosphor-icons/**",
+      "!node_modules/react/**",
+      "!node_modules/react-dom/**",
+      "!node_modules/scheduler/**",
+      "!node_modules/motion/**",
+      "!node_modules/motion-dom/**",
+      "!node_modules/motion-utils/**",
+      "!node_modules/framer-motion/**",
+      "!node_modules/clsx/**",
+      "!node_modules/tailwind-merge/**",
+      "!node_modules/tslib/**",
+      "!node_modules/@openai/codex-win32-x64/**",
+      "!node_modules/@openai/codex-win32-arm64/**",
+      "!node_modules/@openai/codex-darwin-*/**",
+      "!node_modules/@openai/codex-linux-*/**",
+      "!node_modules/koffi/build/koffi/darwin_*/**",
+      "!node_modules/koffi/build/koffi/linux_*/**",
+      "!node_modules/koffi/build/koffi/musl_*/**",
+      "!node_modules/koffi/build/koffi/freebsd_*/**",
+      "!node_modules/koffi/build/koffi/openbsd_*/**",
+      "!node_modules/koffi/build/koffi/win32_ia32/**",
+      "!node_modules/koffi/build/koffi/win32_arm64/**",
+      "!node_modules/koffi/src/**",
+      "!node_modules/koffi/doc/**",
+      "!node_modules/koffi/vendor/**",
+      "!node_modules/sherpa-onnx/*.md"
     ],
     "extraResources": [
       {
         "from": "assets/",
         "to": "assets",
         "filter": [
-          "**/*"
+          "icon.ico",
+          "icon.png",
+          "tray-icon.png",
+          "tray-icon-16.png"
         ]
       }
     ],

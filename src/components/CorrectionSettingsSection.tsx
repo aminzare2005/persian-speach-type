@@ -139,6 +139,7 @@ export function CorrectionSettingsSection({
           </div>
           <p className="mt-1.5 text-xs leading-5 text-stone-500">
             از اشتراک ChatGPT شما استفاده می‌شود — کلید API لازم نیست.
+            در اولین استفاده، موتور Codex (~۳۰۰ مگ) یک‌بار دانلود می‌شود.
           </p>
           {codexConnected ? (
             <div

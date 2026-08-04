@@ -5,6 +5,15 @@ All notable changes to Persian Speach Type are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.0.3] - 2026-08-04
+
+### Changed
+
+- Much smaller installer (~92 MB vs ~196 MB) by not shipping the Codex binary inside Setup
+- Codex / ChatGPT correction runtime downloads once on first use (~300 MB) into app data
+- Trimmed unused renderer packages and non-Windows koffi binaries from the package
+- Stronger NSIS compression and fewer Electron locale packs
+
 ## [1.0.2] - 2026-08-04
 
 ### Changed
@@ -34,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Tray shell with home, settings, and history panels
 - Windows NSIS installer (`Persian Speach Type-Setup-1.0.0.exe`)
 
+[1.0.3]: https://github.com/aminzare2005/persian-speach-type/releases/tag/v1.0.3
 [1.0.2]: https://github.com/aminzare2005/persian-speach-type/releases/tag/v1.0.2
 [1.0.1]: https://github.com/aminzare2005/persian-speach-type/releases/tag/v1.0.1
 [1.0.0]: https://github.com/aminzare2005/persian-speach-type/releases/tag/v1.0.0
